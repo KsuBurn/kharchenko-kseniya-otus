@@ -8,20 +8,26 @@ type InputPropsType = {
   placeholder: string;
   itemsList: any[]
   onSelect?: (evt: any) => void;
-  onBlur?: (evt: any) => void;
+  onChange?: (evt: any, newValue: string ) => void;
+  onInputChange?: (evt: any, newInputValue: string ) => void;
   options: any;
+  disabled?: boolean
 }
 
-export const Input: FC<InputPropsType> = ({placeholder, itemsList, onSelect, onBlur, options}) => {
+export const Input: FC<any> = ({onInputChange, onChange, disabled = false, placeholder, itemsList, onSelect, options}) => {
   return (
     <Autocomplete
+      disabled={disabled}
       onSelect={onSelect}
       blurOnSelect
-      id={placeholder}
+      autoHighlight
       freeSolo
+      id={placeholder}
       disableClearable
       className={styles.input}
       options={options}
+      onChange={onChange}
+      onInputChange={onInputChange}
       renderInput={(params) => (
           <TextField
             {...params}
@@ -31,7 +37,7 @@ export const Input: FC<InputPropsType> = ({placeholder, itemsList, onSelect, onB
               type: 'search',
             }}
 
-            onBlur={onBlur}
+            margin='normal'
           />
       )}
     />
