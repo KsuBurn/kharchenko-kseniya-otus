@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
 import Card from '@mui/material/Card';
-import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import {NavLink} from 'react-router-dom';
-import {addToLocalstorage} from '../../utils/addToLocalstorage';
-import {getFromLocalstorage} from '../../utils/getFromLocalstorage';
+import styles from './WeatherCard.module.css';
+import {FavoriteButton} from '../FavoriteButton/FavoriteButton';
 
 export const WeatherCard: FC<any> = ({cityWeather}) => {
   const {
@@ -18,20 +17,11 @@ export const WeatherCard: FC<any> = ({cityWeather}) => {
     lon
   } = cityWeather;
 
-  const addToFavorite = () => {
-    const favoritesCities = JSON.parse(getFromLocalstorage('cities'));
-
-    if (!favoritesCities) {
-      addToLocalstorage('cities', JSON.stringify([cityName]));
-    }
-
-    if (favoritesCities && !favoritesCities.find(item => item === cityName)) {
-      addToLocalstorage('cities', JSON.stringify([...favoritesCities, cityName]));
-    }
-  };
-
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" className={styles.wrap}>
+      <div className={styles.favorite}>
+        <FavoriteButton cityName={cityName} />
+      </div>
       <NavLink
         to={`/weather/${cityName}`}
         state={{
@@ -40,22 +30,27 @@ export const WeatherCard: FC<any> = ({cityWeather}) => {
           lon
         }}
       >
-        <h3>{cityName}</h3>
+        <h2 className={styles.title}>{cityName}</h2>
       </NavLink>
-      <p>{date}</p>
-      <p>{temperature}&#176;C</p>
-      {weather.map(item => (
+      <p className={styles.date}>{date}</p>
+      <div className={styles.mainWeather}>
+        <p className={styles.temperature}>{temperature}&#176;C</p>
         <div>
-          <img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>
-          <p key={item.id}>{item.description}</p>
+          {weather.map(item => (
+            <div className={styles.weather} key={item}>
+              <img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>
+              <p key={item.id}>{item.description}</p>
+            </div>
+          ))}
         </div>
-      ))}
-      <p>Feel likes {perceivedTemperature}&#176;C</p>
-      <p>Humidity {humidity}%</p>
-      <div>
-        Wind {windSpeed} m/s
       </div>
-      <FavoriteTwoToneIcon onClick={addToFavorite}/>
+      <div className={styles.additionalWeather}>
+        <p className={styles.additionalWeatherItem}>Feel likes {perceivedTemperature}&#176;C</p>
+        <p className={styles.additionalWeatherItem}>Humidity {humidity}%</p>
+        <p className={styles.additionalWeatherItem}>
+          Wind {windSpeed} m/s
+        </p>
+      </div>
     </Card>
   )
 }

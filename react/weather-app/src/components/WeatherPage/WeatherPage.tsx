@@ -1,10 +1,10 @@
-import {FC, useEffect, useState} from 'react';
-import {API_KEY, WEATHER_URL} from '../../api/constant';
-import {NavLink, useLocation, useParams} from 'react-router-dom';
-import moment from 'moment';
+import React, {FC, useEffect, useState} from 'react';
+import {useLocation, useParams} from 'react-router-dom';
 import {normalizeDailyWeather} from '../../utils/normalizeWeather';
-import {WeatherCard} from '../WeatherCard/WeatherCard';
-import {GoHomeButton} from '../GoHomeButton/GoHomeButton';
+import {EasyWeatherCard} from '../EasyWeatherCard/EasyWeatherCard';
+import {FavoriteButton} from '../FavoriteButton/FavoriteButton';
+import styles from './WeatherPage.module.css';
+import {getDailyWeatherData} from '../../api/getDailyWeatherData';
 
 export const WeatherPage: FC = (props) => {
   const {cityName} = useParams()
@@ -12,20 +12,28 @@ export const WeatherPage: FC = (props) => {
   const [dailyWeather, setDailyWeather] = useState<any>();
 
   useEffect(() => {
-    fetch(`${WEATHER_URL}/onecall?lat=${state.lat}&lon=${state.lon}&exclude=minutely,alerts,hourly&units=metric&appid=${API_KEY}`)
-      .then(response => response.json())
+    getDailyWeatherData({lat: state.lat, lon: state.lon})
       .then(result => {
         setDailyWeather(normalizeDailyWeather(result, cityName))
-        console.log('result', normalizeDailyWeather(result, cityName))
       })
-      .catch(error => console.log('error', error));
+      .catch(error => console.error('error', error));
   }, [])
 
   return (
     <div>
-      <GoHomeButton />
+      <div className={styles.pageHead}>
+        <h2 className={styles.title}>{cityName}</h2>
+        <FavoriteButton cityName={cityName} />
+      </div>
       {dailyWeather && dailyWeather.daily.map(item => (
-        <WeatherCard cityWeather={item}/>
+        <EasyWeatherCard
+          temperature={item.temperature}
+          weather={item.weather}
+          perceivedTemperature={item.perceivedTemperature}
+          humidity={item.humidity}
+          windSpeed={item.windSpeed}
+          date={item.date}
+        />
       ))}
     </div>
   )

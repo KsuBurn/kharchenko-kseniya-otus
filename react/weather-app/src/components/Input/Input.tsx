@@ -3,42 +3,58 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import styles from './Input.module.css';
 import React from 'react';
+import Box from '@mui/material/Box';
 
 type InputPropsType = {
   placeholder: string;
   itemsList: any[]
   onSelect?: (evt: any) => void;
-  onChange?: (evt: any, newValue: string ) => void;
-  onInputChange?: (evt: any, newInputValue: string ) => void;
-  options: any;
+  onChange?: (evt: any, newValue: string) => void;
+  onInputChange?: (evt: any, newInputValue: string) => void;
+  options: () => {};
   disabled?: boolean
 }
 
-export const Input: FC<any> = ({onInputChange, onChange, disabled = false, placeholder, itemsList, onSelect, options}) => {
+export const Input: FC<any> = ({
+                                 onChange,
+                                 disabled = false,
+                                 placeholder,
+                                 onSelect,
+                                 options,
+                                 value,
+                                 getOptionLabel,
+                                 renderOption,
+                                 onInputChange,
+  onBlur
+                               }) => {
   return (
     <Autocomplete
-      disabled={disabled}
-      onSelect={onSelect}
+      onInputChange={onInputChange}
       blurOnSelect
       autoHighlight
       freeSolo
-      id={placeholder}
-      disableClearable
       className={styles.input}
+      id={placeholder}
+      disabled={disabled}
+      onSelect={onSelect}
       options={options}
       onChange={onChange}
-      onInputChange={onInputChange}
+      getOptionLabel={getOptionLabel}
+      renderOption={renderOption}
       renderInput={(params) => (
-          <TextField
-            {...params}
-            label={placeholder}
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-            }}
-
-            margin='normal'
-          />
+        <TextField
+          {...params}
+          label={placeholder}
+          InputProps={{
+            ...params.InputProps,
+          }}
+          margin="normal"
+          inputProps={{
+            ...params.inputProps,
+            value: value,
+            onBlur:onBlur
+          }}
+        />
       )}
     />
   )

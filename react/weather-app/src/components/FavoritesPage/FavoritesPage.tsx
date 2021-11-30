@@ -1,12 +1,11 @@
 import React, {FC, useState} from 'react';
 import {getFromLocalstorage} from '../../utils/getFromLocalstorage';
-import {GoHomeButton} from '../GoHomeButton/GoHomeButton';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import {getCurrentWeatherData} from '../../api/getCurrentWeatherData';
 import {normalizeCurrentWeather} from '../../utils/normalizeWeather';
 import {WeatherCard} from '../WeatherCard/WeatherCard';
+import ListItemButton from '@mui/material/ListItemButton/';
 
 export const FavoritesPage: FC = () => {
   const [cityWeather, setCityWeather] = useState();
@@ -17,25 +16,20 @@ export const FavoritesPage: FC = () => {
     getCurrentWeatherData(item)
       .then(result => {
         setCityWeather(normalizeCurrentWeather(result))
-        console.log('result', normalizeCurrentWeather(result))
       })
-      .catch(error => console.log('error', error));
+      .catch(error => console.error('Error', error));
   }
 
   return (
-    <div>
-      <GoHomeButton />
-
+    <>
       <List>
         {favoritesCities.map((item) => (
-          <ListItem key={item} onClick={() => handleClick(item)}>
+          <ListItemButton key={item} onClick={() => handleClick(item)}>
             <ListItemText primary={item} />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
-
       {cityWeather && <WeatherCard cityWeather={cityWeather}/>}
-
-    </div>
+    </>
   )
 }

@@ -1,0 +1,41 @@
+.wrap {
+  padding: 10px;
+  margin: 10px 0;
+  position: relative;
+}
+
+.title {
+  margin: 0;
+  display: inline-block;
+}
+
+.date {
+  font-size: 13px;
+  margin: 0;
+}
+
+.temperature {
+  font-size: 25px;
+}
+
+.mainWeather {
+  display: flex;
+  align-items: center;
+}
+
+.weather {
+  display: flex;
+}
+
+.additionalWeather {
+  display: flex;
+}
+
+.additionalWeatherItem {
+  margin-right: 20px;
+}
+
+.favorite {
+  position: absolute;
+  right: 10px;
+}
