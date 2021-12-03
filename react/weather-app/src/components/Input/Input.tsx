@@ -25,7 +25,6 @@ export const Input: FC<any> = ({
                                  getOptionLabel,
                                  renderOption,
                                  onInputChange,
-  onBlur
                                }) => {
   return (
     <Autocomplete
@@ -52,7 +51,6 @@ export const Input: FC<any> = ({
           inputProps={{
             ...params.inputProps,
             value: value,
-            onBlur:onBlur
           }}
         />
       )}

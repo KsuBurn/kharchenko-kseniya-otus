@@ -16,7 +16,7 @@ export const WeatherCard: FC<any> = ({cityWeather}) => {
     lat,
     lon
   } = cityWeather;
-
+console.log('cityName', cityName)
   return (
     <Card variant="outlined" className={styles.wrap}>
       <div className={styles.favorite}>
@@ -38,7 +38,8 @@ export const WeatherCard: FC<any> = ({cityWeather}) => {
         <div>
           {weather.map(item => (
             <div className={styles.weather} key={item}>
-              <img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>
+              {/*<img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>*/}
+              <img src={item.icon} alt=""/>
               <p key={item.id}>{item.description}</p>
             </div>
           ))}

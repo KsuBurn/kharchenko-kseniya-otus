@@ -11,7 +11,8 @@ export const EasyWeatherCard: FC<any> = ({temperature, weather, perceivedTempera
           <div>
             {weather.map(item => (
               <div className={styles.weather} key={item}>
-                <img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>
+                {/*<img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>*/}
+                <img src={item.icon} alt=""/>
                 <p key={item.id}>{item.description}</p>
               </div>
             ))}

@@ -12,8 +12,15 @@ export const WeatherPage: FC = (props) => {
   const [dailyWeather, setDailyWeather] = useState<any>();
 
   useEffect(() => {
-    getDailyWeatherData({lat: state.lat, lon: state.lon})
+    // getDailyWeatherData({lat: state.lat, lon: state.lon})
+    //   .then(result => {
+    //     setDailyWeather(normalizeDailyWeather(result, cityName))
+    //   })
+    //   .catch(error => console.error('error', error));
+
+    getDailyWeatherData(cityName)
       .then(result => {
+        console.log('result', result)
         setDailyWeather(normalizeDailyWeather(result, cityName))
       })
       .catch(error => console.error('error', error));
@@ -25,6 +32,7 @@ export const WeatherPage: FC = (props) => {
         <h2 className={styles.title}>{cityName}</h2>
         <FavoriteButton cityName={cityName} />
       </div>
+      {console.log('dailyWeather', dailyWeather)}
       {dailyWeather && dailyWeather.daily.map(item => (
         <EasyWeatherCard
           temperature={item.temperature}
