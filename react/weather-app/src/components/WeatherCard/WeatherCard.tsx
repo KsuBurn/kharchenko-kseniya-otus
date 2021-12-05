@@ -3,8 +3,13 @@ import Card from '@mui/material/Card';
 import {NavLink} from 'react-router-dom';
 import styles from './WeatherCard.module.css';
 import {FavoriteButton} from '../FavoriteButton/FavoriteButton';
+import {CurrentWeatherData} from '../../types/types';
 
-export const WeatherCard: FC<any> = ({cityWeather}) => {
+type WeatherCardPropsType = {
+  cityWeather: CurrentWeatherData;
+};
+
+export const WeatherCard: FC<WeatherCardPropsType> = ({ cityWeather }) => {
   const {
     cityName,
     date,
@@ -13,22 +18,15 @@ export const WeatherCard: FC<any> = ({cityWeather}) => {
     humidity,
     weather,
     windSpeed,
-    lat,
-    lon
   } = cityWeather;
-console.log('cityName', cityName)
+
   return (
     <Card variant="outlined" className={styles.wrap}>
       <div className={styles.favorite}>
-        <FavoriteButton cityName={cityName} />
+        <FavoriteButton cityName={cityName}/>
       </div>
       <NavLink
         to={`/weather/${cityName}`}
-        state={{
-          cityName,
-          lat,
-          lon
-        }}
       >
         <h2 className={styles.title}>{cityName}</h2>
       </NavLink>
@@ -36,13 +34,10 @@ console.log('cityName', cityName)
       <div className={styles.mainWeather}>
         <p className={styles.temperature}>{temperature}&#176;C</p>
         <div>
-          {weather.map(item => (
-            <div className={styles.weather} key={item}>
-              {/*<img src={`https://openweathermap.org/img/wn/${item.icon}.png`} alt=""/>*/}
-              <img src={item.icon} alt=""/>
-              <p key={item.id}>{item.description}</p>
-            </div>
-          ))}
+          <div className={styles.weather}>
+            <img src={weather.icon} alt=""/>
+            <p>{weather.description}</p>
+          </div>
         </div>
       </div>
       <div className={styles.additionalWeather}>

@@ -8,7 +8,6 @@ import styles from './GoToFavoriteButton.module.css';
 
 export const GoToFavoriteButton: FC = () => {
   const [open, setOpen] = React.useState(false);
-  const [isFavoriteCities, setIsFavoriteCities] = useState(false);
 
   const favoritesCities = JSON.parse(getFromLocalstorage('cities'));
 

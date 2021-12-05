@@ -9,7 +9,6 @@ import {GoHomeButton} from '../GoHomeButton/GoHomeButton';
 
 export const App: FC = () => {
 
-
   return (
     <Router>
       <div className={styles.wrap}>

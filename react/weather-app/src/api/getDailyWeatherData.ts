@@ -1,14 +1,7 @@
-import {API_KEY, WEATHER_URL} from './constant';
+import {API_KEY, WEATHER_API_URL} from './constant';
 
-export const getDailyWeatherData = (cityName) => {
-  // return fetch(`${WEATHER_URL}/onecall?lat=${lat}&lon=${lon}&exclude=minutely,alerts,hourly&units=metric&appid=${API_KEY}`)
-  //   .then(response => response.json())
-  //   .then(result => result)
-  //   .catch(error => {
-  //     throw new Error(error)
-  //   });
-
-  return fetch(`http://api.weatherapi.com/v1/forecast.json?key=183bde896e0541fbab975023210312&days=3&q=${cityName}`)
+export const getDailyWeatherData = (cityName: string) => {
+  return fetch(`${WEATHER_API_URL}/forecast.json?key=${API_KEY}&days=3&q=${cityName}`)
     .then(response => response.json())
     .then(result => result)
     .catch((err) => {
