@@ -1,9 +1,12 @@
 <template>
-  <input
-      type="checkbox"
-      :id="id"
-  >
-  <label :for="id">{{label}}</label>
+  <div class="checkboxWrap">
+    <input
+        type="checkbox"
+        :id="id"
+        :name="id"
+    >
+    <label :for="id">{{label}}</label>
+  </div>
 </template>
 
 <script>
@@ -18,5 +21,7 @@ export default {
 </script>
 
 <style scoped>
-
+.checkboxWrap {
+  margin-bottom: 10px;
+}
 </style>

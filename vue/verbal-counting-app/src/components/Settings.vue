@@ -1,29 +1,39 @@
 <template>
   <h3>Настройки</h3>
-  <Range
-      labelText="Длительность мин."
-      max="15"
-      id="time"
-  />
+  <form @submit.prevent="$emit('submit', $event.target)">
 
-  <Range
-      labelText="Сложность"
-      max="3"
-      id="level"
-  />
-
-  <div v-for="operator in mathOperators" :key="operator.id">
-    <Checkbox
-      :id="operator.id"
-      :label="operator.title"
+    <Range
+        id="time"
+        v-model="time"
+        :value="time"
+        :max="5"
+        :label-text="`Длительность: ${ time } мин.`"
+        @change:value="time = $event"
     />
-  </div>
 
+    <Range
+        id="level"
+        v-model="level"
+        :value="level"
+        :max="3"
+        :label-text="`Сложность: ${ level }`"
+        @change:value="level = $event"
+    />
+
+    <div v-for="operator in mathOperators" :key="operator.id">
+      <Checkbox
+          :id="operator.id"
+          :label="operator.title"
+      />
+    </div>
+
+    <button type="submit">Play!</button>
+  </form>
 </template>
 
 <script>
-import Range from '@/components/Range';
 import Checkbox from '@/components/Checkbox';
+import Range from '@/components/Range';
 import {mathOperators} from '@/constants';
 
 export default {
@@ -36,7 +46,10 @@ export default {
 
   data() {
     return {
-      mathOperators
+      mathOperators,
+      time: 1,
+      level: 1,
+      text: ''
     }
   }
 }
