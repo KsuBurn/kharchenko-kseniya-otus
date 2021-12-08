@@ -5,10 +5,11 @@ import {EasyWeatherCard} from './EasyWeatherCard/EasyWeatherCard';
 import {FavoriteButton} from '../FavoriteButton/FavoriteButton';
 import styles from './WeatherPage.module.css';
 import {getDailyWeatherData} from '../../api/getDailyWeatherData';
+import {DailyWeatherData} from '../../types/types';
 
 export const WeatherPage: FC = () => {
   const {cityName} = useParams()
-  const [dailyWeather, setDailyWeather] = useState<any>();
+  const [dailyWeather, setDailyWeather] = useState<DailyWeatherData>();
   const [showError, setShowError] = useState(false);
 
 

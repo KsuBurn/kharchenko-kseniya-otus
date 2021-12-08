@@ -12,6 +12,7 @@ import {CurrentWeatherData} from '../../types/types';
 
 export const Main: FC = () => {
   const [selectedCity, setSelectedCity] = useState('');
+  const [inputCity, setInputCity] = useState('');
 
   const [options, setOptions] = useState([])
   const [cityWeather, setCityWeather] = useState<CurrentWeatherData | undefined>();
@@ -19,8 +20,9 @@ export const Main: FC = () => {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
-  const handleSearchWeather = () => {
-    getCurrentWeatherData(selectedCity)
+  const handleSearchWeather = (evt, newValue?) => {
+    evt.preventDefault();
+    getCurrentWeatherData(newValue || selectedCity)
       .then(result => {
         if ('error' in result) {
           setErrorMessage(result.error.message);
@@ -37,12 +39,13 @@ export const Main: FC = () => {
       });
   };
 
-  const getCities = _debounce((evt) => {
+  const getCities = _debounce((evt, value) => {
     if (showError) {
       setShowError(false);
     }
-    if (evt.target.value && evt.target.value.length) {
-      getCitiesApi(evt.target.value)
+    if (value) {
+      setInputCity(value);
+      getCitiesApi(value)
         .then(result => {
           const cities = result.map(item => item.name)
           setOptions(cities)
@@ -52,7 +55,8 @@ export const Main: FC = () => {
         })
     } else {
       setOptions([]);
-      setCityWeather(undefined)
+      setCityWeather(undefined);
+      setInputCity('');
     }
   }, 400);
 
@@ -60,37 +64,44 @@ export const Main: FC = () => {
     <>
       <GoToFavoriteButton/>
 
-      <Autocomplete
-        autoHighlight
-        freeSolo
-        options={options}
-        id={'Choose a city'}
-        onInputChange={getCities}
-        onChange={(evt, newValue) => {
-          if (newValue) {
-            setSelectedCity(newValue.split(', ')[0]);
-          } else {
-            setSelectedCity('');
-          }
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label={'Choose a city'}
-            InputProps={{
-              ...params.InputProps,
-            }}
-            margin="normal"
-          />
-        )}
-      />
-      <Button
-        variant="contained"
-        onClick={handleSearchWeather}
-        disabled={!selectedCity.length}
-      >
-        Search
-      </Button>
+      <form onSubmit={handleSearchWeather}>
+        <Autocomplete
+          autoComplete
+          freeSolo
+          options={options}
+          id={'Choose a city'}
+          onInputChange={getCities}
+          onChange={(evt, newValue) => {
+            if (newValue) {
+              setSelectedCity(newValue.split(', ')[0]);
+              handleSearchWeather(evt, newValue.split(', ')[0]);
+              setInputCity(newValue.split(', ')[0]);
+            } else {
+              setSelectedCity('');
+            }
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={'Choose a city'}
+              InputProps={{
+                ...params.InputProps,
+              }}
+              inputProps={{
+                ...params.inputProps,
+              }}
+              margin="normal"
+            />
+          )}
+        />
+        <Button
+          type={'submit'}
+          variant="contained"
+          disabled={inputCity.length < 2}
+        >
+          Search
+        </Button>
+      </form>
       {cityWeather && selectedCity.length ? <WeatherCard cityWeather={cityWeather}/> : null}
       {showError && <p>Something went wrong. Please try later.</p>}
       {errorMessage && <p>{errorMessage}</p>}
