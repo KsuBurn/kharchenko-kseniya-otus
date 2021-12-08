@@ -1,11 +1,19 @@
 <template>
-  <input type="checkbox">
-  <label>Label</label>
+  <input
+      type="checkbox"
+      :id="id"
+  >
+  <label :for="id">{{label}}</label>
 </template>
 
 <script>
 export default {
-  name: 'Checkbox'
+  name: 'Checkbox',
+
+  props: {
+    label: String,
+    id: String,
+  }
 }
 </script>
 
