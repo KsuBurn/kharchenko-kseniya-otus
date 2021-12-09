@@ -1,6 +1,6 @@
 <template>
   <h3>Настройки</h3>
-  <form @submit.prevent="$emit('submit', $event.target)">
+  <form @submit.prevent="$emit('submit', $event)">
 
     <Range
         id="time"
@@ -24,6 +24,7 @@
       <Checkbox
           :id="operator.id"
           :label="operator.title"
+          :is-checked="selectedOperators.indexOf(operator.id) > -1"
       />
     </div>
 
@@ -35,6 +36,7 @@
 import Checkbox from '@/components/Checkbox';
 import Range from '@/components/Range';
 import {mathOperators} from '@/constants';
+import {useStore} from 'vuex';
 
 export default {
   name: 'Settings',
@@ -44,14 +46,20 @@ export default {
     Range
   },
 
+  setup() {
+    const store = useStore();
+    return {
+      selectedOperators: store.state.selectedOperators
+    }
+  },
+
   data() {
     return {
       mathOperators,
       time: 1,
       level: 1,
-      text: ''
     }
-  }
+  },
 }
 </script>
 

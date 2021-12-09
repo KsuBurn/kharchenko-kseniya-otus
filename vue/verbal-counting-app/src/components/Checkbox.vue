@@ -4,6 +4,7 @@
         type="checkbox"
         :id="id"
         :name="id"
+        :checked="isChecked"
     >
     <label :for="id">{{label}}</label>
   </div>
@@ -16,6 +17,7 @@ export default {
   props: {
     label: String,
     id: String,
+    isChecked: Boolean,
   }
 }
 </script>
