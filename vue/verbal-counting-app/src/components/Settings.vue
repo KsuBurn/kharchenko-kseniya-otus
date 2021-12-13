@@ -3,31 +3,32 @@
   <form @submit.prevent="$emit('submit', $event)">
 
     <Range
-        id="time"
         v-model="time"
+        id="time"
         :value="time"
         :max="5"
         :label-text="`Длительность: ${ time } мин.`"
-        @change:value="time = $event"
+        @change-range-input="handleChangeTime"
     />
 
     <Range
-        id="level"
         v-model="level"
+        id="level"
         :value="level"
         :max="3"
         :label-text="`Сложность: ${ level }`"
-        @change:value="level = $event"
+        @change-range-input="handleChangeLevel"
     />
 
     <div v-for="operator in mathOperators" :key="operator.id">
+
       <Checkbox
           :id="operator.id"
           :label="operator.title"
-          :is-checked="selectedOperators.indexOf(operator.id) > -1"
+          :is-checked="!!selectedOperators.find(item=> item.id === operator.id)"
+          @handle-change-checkbox="handleChangeCheckbox"
       />
     </div>
-
     <button type="submit">Play!</button>
   </form>
 </template>
@@ -37,6 +38,7 @@ import Checkbox from '@/components/Checkbox';
 import Range from '@/components/Range';
 import {mathOperators} from '@/constants';
 import {useStore} from 'vuex';
+import {computed, ref} from 'vue';
 
 export default {
   name: 'Settings',
@@ -46,18 +48,41 @@ export default {
     Range
   },
 
+  emits: ['submit'],
+
   setup() {
     const store = useStore();
-    return {
-      selectedOperators: store.state.selectedOperators
-    }
-  },
+    const time = ref(1);
+    const level = ref(1);
+    const selectedOperators = ref(store.state.selectedOperators)
 
-  data() {
+    const handleChangeTime = (value) => {
+      time.value = value;
+    };
+
+    const handleChangeLevel = (value) => {
+      level.value = value;
+    };
+
+    const handleChangeCheckbox = (id) => {
+      if (selectedOperators.value.find(item => item.id === id)) {
+        selectedOperators.value = selectedOperators.value.filter(item => item.id !== id);
+        return;
+      }
+
+      if (!selectedOperators.value.find(item => item.id === id)) {
+        selectedOperators.value.push(mathOperators.find(item => item.id === id));
+      }
+    };
+
     return {
+      selectedOperators: computed(() => selectedOperators.value),
       mathOperators,
-      time: 1,
-      level: 1,
+      time: computed(() => time.value.toString()),
+      level: computed(() => level.value.toString()),
+      handleChangeTime,
+      handleChangeLevel,
+      handleChangeCheckbox
     }
   },
 }

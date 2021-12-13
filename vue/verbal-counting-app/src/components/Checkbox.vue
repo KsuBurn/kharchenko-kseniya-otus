@@ -5,14 +5,17 @@
         :id="id"
         :name="id"
         :checked="isChecked"
+        @change="$emit('handle-change-checkbox', id)"
     >
-    <label :for="id">{{label}}</label>
+    <label :for="id">{{ label }}</label>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Checkbox',
+
+  emits: ['handle-change-checkbox'],
 
   props: {
     label: String,

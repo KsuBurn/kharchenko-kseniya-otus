@@ -5,15 +5,19 @@ export const store = createStore({
     return {
       time: 1,
       level: 1,
-      selectedOperators: [],
+      selectedOperators: [
+        {
+          id: 'SUM',
+          symbol: '+',
+          title: 'Суммирование',
+        },
+      ],
     }
   },
 
   mutations: {
     setTime(state: any, payload) {
       state.time = payload.time;
-      console.log('payload', payload)
-
     },
 
     setLevel(state, payload) {

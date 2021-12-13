@@ -1,10 +1,11 @@
 <template>
   <div class="keyboard">
-    <div class="key"
-         v-for="(calcKey, index) of calcKeys"
-         :key="index"
+    <div
+        class="key"
+        v-for="(calcKey, index) of calcKeys"
+        :key="index"
     >
-      <button>{{ calcKey }}</button>
+      <button @click="$emit('handle-key-click', calcKey)">{{ calcKey }}</button>
     </div>
   </div>
 </template>
@@ -13,6 +14,8 @@
 export default {
   name: 'Keyboard',
 
+  emits: ['handle-key-click'],
+
   data() {
     return {
       calcKeys: [
@@ -20,9 +23,9 @@ export default {
         '4', '5', '6',
         '7', '8', '9',
         '?', '0', '='
-      ]
+      ],
     }
-  }
+  },
 }
 </script>
 

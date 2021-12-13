@@ -4,10 +4,22 @@
     <button @click="stopGame">Отмена</button>
     <Timer :handle-show-modal="handleShowModal"/>
   </div>
-  <Keyboard />
+
+  <MathTask
+      v-model="inputAnswer"
+      :input-answer="inputAnswer"
+      :operands="operands"
+      :prepare-task="prepareTask"
+      :highlight-color="highlightColor"
+      @handle-change-answer="handleChangeAnswer"
+      @input-focus="inputFocus"
+      :generate-task="generateTask"
+  />
+
+  <Keyboard @handle-key-click="handleKeyClick"/>
 
   <div v-if="showModal">
-    <Modal :handle-close-modal="handleCloseModal"/>
+    <Modal @handle-close-modal="handleCloseModal"/>
   </div>
 </template>
 
@@ -17,6 +29,9 @@ import {useRouter} from 'vue-router';
 import Keyboard from '@/components/Keyboard';
 import {computed, ref} from 'vue';
 import Modal from '@/components/Modal';
+import MathTask from '@/components/MathTask';
+import {mathOperators, Operatos} from '@/constants';
+import {useStore} from 'vuex';
 
 export default {
   name: 'GamePage',
@@ -24,16 +39,30 @@ export default {
   components: {
     Timer,
     Keyboard,
+    MathTask,
     Modal
   },
 
+
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const level = store.state.level;
+    const selectedOperators = store.state.selectedOperators;
+    const showModal = ref(false);
+    const inputAnswer = ref('');
+    const rightAnswersCount = ref(0);
+    const highlightColor = ref('lightgray');
 
-    let showModal = ref(false);
+    const operands = ref({
+      firstOperand: 0,
+      secondOperand: 0,
+      result: 0,
+      operator: '',
+    });
 
     const stopGame = () => {
-      router.push('/')
+      router.push('/');
     };
 
     const handleShowModal = () => {
@@ -44,13 +73,95 @@ export default {
       showModal.value = false;
     };
 
+    const checkAnswer = () => +inputAnswer.value === operands.value.secondOperand;
+
+    const handleChangeAnswer = (value) => {
+      inputAnswer.value = value;
+    };
+
+    const initialState = () => {
+      highlightColor.value = 'lightgray';
+      inputAnswer.value = '';
+    }
+
+    const generateTask = () => {
+      initialState();
+      const operatorIndex = Math.floor(Math.random() * selectedOperators.length);
+      const selectedOperator = selectedOperators[operatorIndex];
+
+      prepareTask(selectedOperator)
+    }
+
+    const handleKeyClick = (calcKey) => {
+      console.log('calcKey', calcKey)
+
+      if (calcKey === '=' && inputAnswer.value.length) {
+        if(checkAnswer()) {
+          rightAnswersCount.value++;
+          highlightColor.value =  'green';
+          setTimeout(generateTask, 400)
+        } else {
+          highlightColor.value =  'red';
+        }
+
+        return;
+      }
+
+      inputAnswer.value = inputAnswer.value + calcKey;
+    };
+
+    const prepareTask = (operator) => {
+      const firstOperand = Math.floor(Math.random() * 10 * level);
+      const secondOperand = Math.floor(Math.random() * 10 * level);
+      let result;
+
+      switch (operator) {
+        case Operatos.SUM:
+          result = firstOperand + secondOperand;
+          break;
+
+        case Operatos.DIFF:
+          result = firstOperand - secondOperand;
+          break;
+
+        case Operatos.MULT:
+          result = firstOperand * secondOperand;
+          break;
+
+        case Operatos.DIV:
+          result = firstOperand / secondOperand;
+          break;
+
+        case Operatos.EXP:
+          result = Math.pow(firstOperand, secondOperand);
+          break;
+      }
+
+      operands.value.result = result;
+      operands.value.firstOperand = firstOperand;
+      operands.value.secondOperand = secondOperand;
+      operands.value.operator = mathOperators.find((item) => item.id === operator)?.symbol;
+    };
+
+    const inputFocus = () => {
+      highlightColor.value = 'lightgray';
+    };
+
     return {
       stopGame,
       showModal,
       handleShowModal,
-      handleCloseModal
+      handleCloseModal,
+      handleKeyClick,
+      handleChangeAnswer,
+      inputAnswer: computed(() => inputAnswer.value),
+      operands:  operands.value,
+      prepareTask,
+      highlightColor: computed(() => highlightColor.value),
+      inputFocus,
+      generateTask
     }
-  }
+  },
 }
 </script>
 

@@ -8,7 +8,7 @@
         :id="id"
         :name="id"
         :value="value"
-        @change="$emit('change:value', $event.target.value)"
+        @input="$emit('change-range-input', $event.target.value)"
     />
     <label :for="id" class="label">{{ labelText }}</label>
   </div>
@@ -18,15 +18,14 @@
 export default {
   name: 'Range',
 
-  emits: ['change:value'],
-
   props: {
     labelText: String,
     max: Number,
     id: String,
-    value: Number,
+    value: String,
   },
 
+  emits: ['change-range-input'],
 }
 </script>
 

@@ -18,7 +18,6 @@ export default {
   setup(props) {
     const store = useStore();
 
-    // let initialSeconds = ref(store.state.time * 60);
     let initialSeconds = ref(store.state.time * 60);
 
     const addZeroFirst = (num) => {
@@ -35,8 +34,8 @@ export default {
 
     const timeView = computed(() => {
       return {
-        seconds:addZeroFirst(initialSeconds.value % 60),
-        minutes:  addZeroFirst(Math.floor(initialSeconds.value / 60) % 60),
+        seconds: addZeroFirst(initialSeconds.value % 60),
+        minutes: addZeroFirst(Math.floor(initialSeconds.value / 60) % 60),
       }
     });
 
