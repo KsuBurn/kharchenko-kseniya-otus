@@ -3,7 +3,10 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          MODAL
+          <div>
+            <h4>Время вышло!</h4>
+            <p>Ваш результат: {{ rightAnswersCount }}</p>
+          </div>
           <button @click="$emit('handle-close-modal')">OK</button>
         </div>
       </div>
@@ -14,6 +17,9 @@
 <script>
 export default {
   name: 'Modal',
+  props: {
+    rightAnswersCount: Number
+  }
 }
 </script>
 

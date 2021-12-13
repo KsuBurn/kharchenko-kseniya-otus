@@ -5,12 +5,9 @@ export const store = createStore({
     return {
       time: 1,
       level: 1,
+      rightAnswersCount: 0,
       selectedOperators: [
-        {
-          id: 'SUM',
-          symbol: '+',
-          title: 'Суммирование',
-        },
+        'SUM',
       ],
     }
   },
@@ -27,5 +24,9 @@ export const store = createStore({
     setOperations(state, payload) {
       state.selectedOperators = payload.operations;
     },
+
+    addRightAnswer(state, payload) {
+      state.rightAnswersCount = payload.rightAnswersCount;
+    }
   }
 })

@@ -9,6 +9,7 @@
         :name="id"
         :value="value"
         @input="$emit('change-range-input', $event.target.value)"
+        class="range"
     />
     <label :for="id" class="label">{{ labelText }}</label>
   </div>
@@ -36,5 +37,9 @@ export default {
 
 .label {
   display: block;
+}
+
+.range {
+  width: 30%;
 }
 </style>

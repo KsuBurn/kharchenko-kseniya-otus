@@ -25,11 +25,14 @@
       <Checkbox
           :id="operator.id"
           :label="operator.title"
-          :is-checked="!!selectedOperators.find(item=> item.id === operator.id)"
+          :is-checked="!!selectedOperators.find(item=> item === operator.id)"
           @handle-change-checkbox="handleChangeCheckbox"
       />
     </div>
-    <button type="submit">Play!</button>
+    <div v-if="!validation" class="validationMess">
+      Необходимо выбрать операторы
+    </div>
+    <button type="submit" class="playBtn">Play!</button>
   </form>
 </template>
 
@@ -48,9 +51,14 @@ export default {
     Range
   },
 
+  props: {
+    validation: Boolean,
+    changeValidationValue: Function
+  },
+
   emits: ['submit'],
 
-  setup() {
+  setup(props) {
     const store = useStore();
     const time = ref(1);
     const level = ref(1);
@@ -65,13 +73,15 @@ export default {
     };
 
     const handleChangeCheckbox = (id) => {
-      if (selectedOperators.value.find(item => item.id === id)) {
-        selectedOperators.value = selectedOperators.value.filter(item => item.id !== id);
+      props.changeValidationValue(true);
+
+      if (selectedOperators.value.find(item => item === id)) {
+        selectedOperators.value = selectedOperators.value.filter(item => item !== id);
         return;
       }
 
-      if (!selectedOperators.value.find(item => item.id === id)) {
-        selectedOperators.value.push(mathOperators.find(item => item.id === id));
+      if (!selectedOperators.value.find(item => item === id)) {
+        selectedOperators.value.push(mathOperators.find(item => item.id === id).id);
       }
     };
 
@@ -89,5 +99,13 @@ export default {
 </script>
 
 <style scoped>
+.playBtn {
+  font-size: 18px;
+  float: right;
+}
 
+.validationMess {
+  color: red;
+  font-size: 20px;
+}
 </style>

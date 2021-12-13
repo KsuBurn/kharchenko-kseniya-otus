@@ -11,11 +11,9 @@ import {computed, ref, onUnmounted, watch} from 'vue';
 export default {
   name: 'Timer',
 
-  props: {
-    handleShowModal: Function
-  },
+  emits: ['handle-show-modal'],
 
-  setup(props) {
+  setup(props, context) {
     const store = useStore();
 
     let initialSeconds = ref(store.state.time * 60);
@@ -43,9 +41,10 @@ export default {
       clearInterval(timer)
     })
 
+
     watch(initialSeconds, (value) => {
       if (value <= 0) {
-        props.handleShowModal();
+        context.emit('handle-show-modal')
       }
     })
 
@@ -60,7 +59,7 @@ export default {
 .timer {
   text-align: center;
   padding: 8px 16px;
-  font-size: 16px;
+  font-size: 18px;
   background: #ECEFF1;
   border: 1px solid #CFD8DC;
   border-radius: 3px;

@@ -1,8 +1,7 @@
 <template>
-  <p>GamePage</p>
   <div class="gamePageHeader">
-    <button @click="stopGame">Отмена</button>
-    <Timer :handle-show-modal="handleShowModal"/>
+    <button @click="stopGame" class="stopButton">Отмена</button>
+    <Timer @handle-show-modal="handleShowModal"/>
   </div>
 
   <MathTask
@@ -13,13 +12,14 @@
       :highlight-color="highlightColor"
       @handle-change-answer="handleChangeAnswer"
       @input-focus="inputFocus"
-      :generate-task="generateTask"
+      @generate-task="generateTask"
   />
 
+  <div v-if="showError" class="errorMessage">Надо заполнить значение</div>
   <Keyboard @handle-key-click="handleKeyClick"/>
 
   <div v-if="showModal">
-    <Modal @handle-close-modal="handleCloseModal"/>
+    <Modal @handle-close-modal="handleCloseModal" :right-answers-count="rightAnswersCount"/>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
     const inputAnswer = ref('');
     const rightAnswersCount = ref(0);
     const highlightColor = ref('lightgray');
-
+    const showError = ref(false);
     const operands = ref({
       firstOperand: 0,
       secondOperand: 0,
@@ -63,6 +63,7 @@ export default {
 
     const stopGame = () => {
       router.push('/');
+      initialState();
     };
 
     const handleShowModal = () => {
@@ -71,6 +72,12 @@ export default {
 
     const handleCloseModal = () => {
       showModal.value = false;
+
+      store.commit({
+        type: 'addRightAnswer', rightAnswersCount: rightAnswersCount.value
+      })
+
+      stopGame();
     };
 
     const checkAnswer = () => +inputAnswer.value === operands.value.secondOperand;
@@ -82,6 +89,7 @@ export default {
     const initialState = () => {
       highlightColor.value = 'lightgray';
       inputAnswer.value = '';
+      showError.value = false;
     }
 
     const generateTask = () => {
@@ -92,22 +100,46 @@ export default {
       prepareTask(selectedOperator)
     }
 
+    const getHelp = () => {
+      inputAnswer.value = operands.value.secondOperand;
+      highlightColor.value = '#42caff';
+      setTimeout(generateTask, 500)
+    }
+
+    const deleteInputValue = () => {
+      const valueInArr = inputAnswer.value.split('');
+      valueInArr.pop();
+
+      inputAnswer.value = valueInArr.join();
+    }
+
     const handleKeyClick = (calcKey) => {
-      console.log('calcKey', calcKey)
+      showError.value = false;
 
-      if (calcKey === '=' && inputAnswer.value.length) {
-        if(checkAnswer()) {
-          rightAnswersCount.value++;
-          highlightColor.value =  'green';
-          setTimeout(generateTask, 400)
-        } else {
-          highlightColor.value =  'red';
-        }
-
-        return;
+      if (calcKey !== '=' && calcKey !== '?' && calcKey !== 'CE') {
+        inputAnswer.value = inputAnswer.value + calcKey;
       }
 
-      inputAnswer.value = inputAnswer.value + calcKey;
+      if (calcKey === '=' && inputAnswer.value.length) {
+        if (checkAnswer()) {
+          rightAnswersCount.value++;
+          highlightColor.value = 'green';
+          setTimeout(generateTask, 500)
+        } else {
+          highlightColor.value = 'red';
+          setTimeout(generateTask, 500)
+        }
+      } else if (calcKey === '=' && !inputAnswer.value.length) {
+        showError.value = true;
+      }
+
+      if (calcKey === '?') {
+        getHelp();
+      }
+
+      if (calcKey === 'CE' && inputAnswer.value.length) {
+        deleteInputValue();
+      }
     };
 
     const prepareTask = (operator) => {
@@ -145,6 +177,7 @@ export default {
 
     const inputFocus = () => {
       highlightColor.value = 'lightgray';
+      showError.value = false;
     };
 
     return {
@@ -155,11 +188,13 @@ export default {
       handleKeyClick,
       handleChangeAnswer,
       inputAnswer: computed(() => inputAnswer.value),
-      operands:  operands.value,
+      operands: operands.value,
       prepareTask,
       highlightColor: computed(() => highlightColor.value),
       inputFocus,
-      generateTask
+      generateTask,
+      showError: computed(() => showError.value),
+      rightAnswersCount: computed(() => rightAnswersCount.value)
     }
   },
 }
@@ -169,5 +204,15 @@ export default {
 .gamePageHeader {
   display: flex;
   justify-content: space-between;
+}
+
+.stopButton {
+  font-size: 18px;
+}
+
+.errorMessage {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>

@@ -2,10 +2,13 @@
   <div>
     <h2>Привет!</h2>
     <p>Добро пожаловать на тренировочный день.</p>
-    <!--    <p>Ваш последний результат - решено {{rightAnswersCount}} из {{totalTasksCount}}.</p>-->
-    <!--    <p>Общая точность {{getAccuracyPercent}} %.</p>-->
+        <p>Ваш последний результат - решено {{rightAnswersCount}}.</p>
   </div>
-  <Settings @submit="handleSubmit"/>
+  <Settings
+      @submit="handleSubmit"
+      :validation="validation"
+      :change-validation-value="changeValidationValue"
+  />
 </template>
 
 <script>
@@ -13,6 +16,7 @@ import Settings from '@/components/Settings';
 import {mathOperators} from '@/constants';
 import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
+import {computed, ref} from 'vue';
 
 export default {
   name: 'MainPage',
@@ -25,6 +29,8 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const validation = ref(true);
+    const rightAnswersCount = store.state.rightAnswersCount;
 
     const handleSubmit = (event) => {
       const data = new FormData(event.target);
@@ -47,12 +53,22 @@ export default {
       })
 
       if (operations.length > 0) {
-        router.push('/game')
+        validation.value = true;
+        router.push('/game');
+      } else {
+        validation.value = false;
       }
     }
 
+    const changeValidationValue = (value) => {
+      validation.value = value;
+    };
+
     return {
-      handleSubmit
+      handleSubmit,
+      validation: computed(() => validation.value),
+      changeValidationValue,
+      rightAnswersCount
     }
   }
 

@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <span>{{ operands.firstOperand }}</span>
-    <span>{{ operands.operator }}</span>
+  <div class="wrap">
+    <span>{{ operands.firstOperand }} </span>
+    <span>&nbsp;{{ operands.operator }}&nbsp;</span>
     <input
         :value="inputAnswer"
         @input="$emit('handle-change-answer', $event.target.value)"
@@ -19,7 +19,7 @@
 export default {
   name: 'MathTask',
 
-  emits: ['handle-change-answer'],
+  emits: ['handle-change-answer', 'generate-task'],
 
   props: {
     inputAnswer: String,
@@ -37,18 +37,8 @@ export default {
     }
   },
 
-  // methods: {
-  //   generateTask() {
-  //     const operatorIndex = Math.floor(Math.random() * this.operators.length);
-  //     const selectedOperator = this.operators[operatorIndex];
-  //
-  //     this.prepareTask(selectedOperator)
-  //   },
-  //
-  // },
-
   mounted() {
-    this.generateTask()
+    this.$emit('generate-task');
   }
 }
 </script>
@@ -58,5 +48,17 @@ export default {
   border: none;
   border-bottom: solid 1px lightgray;
   outline: none;
+  width: 100px;
+  font-size: 30px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.wrap {
+  width: 100%;
+  margin: auto 0 0;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 500;
 }
 </style>
