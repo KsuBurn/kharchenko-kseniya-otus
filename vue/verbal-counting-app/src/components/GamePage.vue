@@ -3,7 +3,6 @@
     <button @click="stopGame" class="stopButton">Отмена</button>
     <Timer @handle-show-modal="handleShowModal"/>
   </div>
-
   <MathTask
       v-model="inputAnswer"
       :input-answer="inputAnswer"
@@ -14,10 +13,8 @@
       @input-focus="inputFocus"
       @generate-task="generateTask"
   />
-
   <div v-if="showError" class="errorMessage">Надо заполнить значение</div>
   <Keyboard @handle-key-click="handleKeyClick"/>
-
   <div v-if="showModal">
     <Modal @handle-close-modal="handleCloseModal" :right-answers-count="rightAnswersCount"/>
   </div>
@@ -101,7 +98,7 @@ export default {
     }
 
     const getHelp = () => {
-      inputAnswer.value = operands.value.secondOperand;
+      inputAnswer.value = operands.value.secondOperand.toString();
       highlightColor.value = '#42caff';
       setTimeout(generateTask, 500)
     }
@@ -187,14 +184,14 @@ export default {
       handleCloseModal,
       handleKeyClick,
       handleChangeAnswer,
-      inputAnswer: computed(() => inputAnswer.value),
       operands: operands.value,
       prepareTask,
-      highlightColor: computed(() => highlightColor.value),
       inputFocus,
       generateTask,
       showError: computed(() => showError.value),
-      rightAnswersCount: computed(() => rightAnswersCount.value)
+      rightAnswersCount: computed(() => rightAnswersCount.value),
+      inputAnswer: computed(() => inputAnswer.value),
+      highlightColor: computed(() => highlightColor.value),
     }
   },
 }

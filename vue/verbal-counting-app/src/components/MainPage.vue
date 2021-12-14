@@ -2,7 +2,7 @@
   <div>
     <h2>Привет!</h2>
     <p>Добро пожаловать на тренировочный день.</p>
-        <p>Ваш последний результат - решено {{rightAnswersCount}}.</p>
+    <p>Ваш последний результат - решено {{ rightAnswersCount }}.</p>
   </div>
   <Settings
       @submit="handleSubmit"
@@ -71,8 +71,6 @@ export default {
       rightAnswersCount
     }
   }
-
-
 }
 </script>
 

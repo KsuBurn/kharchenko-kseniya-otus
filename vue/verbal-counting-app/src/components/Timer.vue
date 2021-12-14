@@ -1,6 +1,6 @@
 <template>
   <div class="timer">
-    {{timeView.minutes}} : {{timeView.seconds}}
+    {{ timeView.minutes }} : {{ timeView.seconds }}
   </div>
 </template>
 

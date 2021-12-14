@@ -1,5 +1,12 @@
 import {createStore} from 'vuex';
 
+type StoreType = {
+  time: number;
+  level: number;
+  rightAnswersCount: number;
+  selectedOperators: string[];
+}
+
 export const store = createStore({
   state() {
     return {
@@ -13,19 +20,19 @@ export const store = createStore({
   },
 
   mutations: {
-    setTime(state: any, payload) {
+    setTime(state: StoreType, payload) {
       state.time = payload.time;
     },
 
-    setLevel(state, payload) {
+    setLevel(state: StoreType, payload) {
       state.level = payload.level;
     },
 
-    setOperations(state, payload) {
+    setOperations(state: StoreType, payload) {
       state.selectedOperators = payload.operations;
     },
 
-    addRightAnswer(state, payload) {
+    addRightAnswer(state: StoreType, payload) {
       state.rightAnswersCount = payload.rightAnswersCount;
     }
   }
