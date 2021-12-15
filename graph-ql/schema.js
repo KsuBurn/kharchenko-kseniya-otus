@@ -28,7 +28,7 @@ const SellerType = new GraphQLObjectType({
     id: {
       type: new GraphQLNonNull(GraphQLString)
     },
-    name: {
+    title: {
       type: new GraphQLNonNull(GraphQLString)
     },
   })
@@ -38,15 +38,14 @@ const CategoryType = new GraphQLObjectType({
   name: 'Category',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
     },
     title: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
     },
     products: {
       type: new GraphQLList(ProductType),
       resolve: (root) => {
-        console.log(root)
         const categoryId = root.id;
         return products.filter(item => item.categoryId === categoryId);
       }

@@ -22,6 +22,16 @@ const query = new GraphQLObjectType({
         }
       },
 
+      product: {
+        type: ProductType,
+        args: {
+          productId: {type: GraphQLString}
+        },
+        resolve: function (root, args) {
+          return products.find(item => item.id === args.productId);
+        }
+      },
+
       categories: {
         type: new GraphQLList(CategoryType),
         resolve: function () {
@@ -35,6 +45,18 @@ const query = new GraphQLObjectType({
           return sellers;
         }
       },
+
+      sellerProducts: {
+        type: new GraphQLList(ProductType),
+        args: {
+          sellerId: {
+            type: GraphQLString,
+          }
+        },
+        resolve: function (root, args) {
+          return products.filter(item => item.sellerId === args.sellerId)
+        }
+      }
     }
   }
 });
