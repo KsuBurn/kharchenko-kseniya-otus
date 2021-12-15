@@ -49,6 +49,7 @@ export default {
     const showModal = ref(false);
     const inputAnswer = ref('');
     const rightAnswersCount = ref(0);
+    const totalTasksCount = ref(0);
     const highlightColor = ref('lightgray');
     const showError = ref(false);
     const operands = ref({
@@ -59,6 +60,14 @@ export default {
     });
 
     const stopGame = () => {
+      store.commit({
+        type: 'addRightAnswer', rightAnswersCount: rightAnswersCount.value
+      })
+
+      store.commit({
+        type: 'addTotalTasksCount', totalTasksCount: totalTasksCount.value
+      })
+
       router.push('/');
       initialState();
     };
@@ -72,6 +81,10 @@ export default {
 
       store.commit({
         type: 'addRightAnswer', rightAnswersCount: rightAnswersCount.value
+      })
+
+      store.commit({
+        type: 'addTotalTasksCount', totalTasksCount: totalTasksCount.value
       })
 
       stopGame();
@@ -91,6 +104,8 @@ export default {
 
     const generateTask = () => {
       initialState();
+      totalTasksCount.value++;
+
       const operatorIndex = Math.floor(Math.random() * selectedOperators.length);
       const selectedOperator = selectedOperators[operatorIndex];
 
@@ -121,11 +136,10 @@ export default {
         if (checkAnswer()) {
           rightAnswersCount.value++;
           highlightColor.value = 'green';
-          setTimeout(generateTask, 500)
         } else {
           highlightColor.value = 'red';
-          setTimeout(generateTask, 500)
         }
+        setTimeout(generateTask, 500);
       } else if (calcKey === '=' && !inputAnswer.value.length) {
         showError.value = true;
       }

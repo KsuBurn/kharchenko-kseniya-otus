@@ -4,6 +4,7 @@ type StoreType = {
   time: number;
   level: number;
   rightAnswersCount: number;
+  totalTasksCount: number;
   selectedOperators: string[];
 }
 
@@ -13,6 +14,7 @@ export const store = createStore({
       time: 1,
       level: 1,
       rightAnswersCount: 0,
+      totalTasksCount: 0,
       selectedOperators: [
         'SUM',
       ],
@@ -34,6 +36,10 @@ export const store = createStore({
 
     addRightAnswer(state: StoreType, payload) {
       state.rightAnswersCount = payload.rightAnswersCount;
+    },
+
+    addTotalTasksCount(state: StoreType, payload) {
+      state.totalTasksCount = payload.totalTasksCount;
     }
   }
 })

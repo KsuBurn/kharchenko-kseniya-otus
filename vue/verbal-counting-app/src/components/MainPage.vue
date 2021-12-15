@@ -2,7 +2,8 @@
   <div>
     <h2>Привет!</h2>
     <p>Добро пожаловать на тренировочный день.</p>
-    <p>Ваш последний результат - решено {{ rightAnswersCount }}.</p>
+    <p>Ваш последний результат - решено {{ rightAnswersCount }} из {{ totalTasksCount }}.</p>
+    <p>Общая точность {{ accuracyPercent }} %.</p>
   </div>
   <Settings
       @submit="handleSubmit"
@@ -31,6 +32,7 @@ export default {
     const router = useRouter();
     const validation = ref(true);
     const rightAnswersCount = store.state.rightAnswersCount;
+    const totalTasksCount = store.state.totalTasksCount;
 
     const handleSubmit = (event) => {
       const data = new FormData(event.target);
@@ -64,11 +66,21 @@ export default {
       validation.value = value;
     };
 
+    const getAccuracyPercent = computed(() => {
+      if (!totalTasksCount || !rightAnswersCount) {
+        return 0
+      }
+
+      return Math.floor(rightAnswersCount / totalTasksCount * 100)
+    })
+
     return {
       handleSubmit,
       validation: computed(() => validation.value),
       changeValidationValue,
-      rightAnswersCount
+      rightAnswersCount,
+      totalTasksCount,
+      accuracyPercent: getAccuracyPercent
     }
   }
 }
