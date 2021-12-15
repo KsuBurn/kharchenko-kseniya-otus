@@ -14,7 +14,7 @@
       @generate-task="generateTask"
   />
   <div v-if="showError" class="errorMessage">Надо заполнить значение</div>
-  <Keyboard @handle-key-click="handleKeyClick"/>
+  <Keyboard @handle-key-click="handleKeyClick" :disable-buttons="disableButtons"/>
   <div v-if="showModal">
     <Modal @handle-close-modal="handleCloseModal" :right-answers-count="rightAnswersCount"/>
   </div>
@@ -52,6 +52,7 @@ export default {
     const totalTasksCount = ref(0);
     const highlightColor = ref('lightgray');
     const showError = ref(false);
+    const disableButtons = ref(false);
     const operands = ref({
       firstOperand: 0,
       secondOperand: 0,
@@ -106,6 +107,10 @@ export default {
       initialState();
       totalTasksCount.value++;
 
+      if (disableButtons.value) {
+        disableButtons.value = false;
+      }
+
       const operatorIndex = Math.floor(Math.random() * selectedOperators.length);
       const selectedOperator = selectedOperators[operatorIndex];
 
@@ -113,6 +118,7 @@ export default {
     }
 
     const getHelp = () => {
+      disableButtons.value = true;
       inputAnswer.value = operands.value.secondOperand.toString();
       highlightColor.value = '#42caff';
       setTimeout(generateTask, 500)
@@ -160,8 +166,8 @@ export default {
         3: 1000
       };
 
-      let firstOperand = Math.floor(Math.random() * mathSignsCount[level]);
-      let secondOperand = Math.floor(Math.random() * mathSignsCount[level]);
+      let firstOperand = Math.floor(Math.random() * mathSignsCount[level]) + 1;
+      let secondOperand = Math.floor(Math.random() * mathSignsCount[level]) + 1;
       let result;
 
       switch (operator) {
@@ -177,20 +183,24 @@ export default {
           result = firstOperand * secondOperand;
           break;
 
-        case Operatos.DIV:
-          result = firstOperand / secondOperand;
+        case Operatos.DIV: {
+          const auxiliaryVar = firstOperand;
+
+          firstOperand = firstOperand * secondOperand;
+          result = auxiliaryVar;
           break;
+        }
 
         case Operatos.EXP: {
           const exponent = {
-            1: [0, 1, 2],
+            1: [0, 1, 2, 3],
             2: [0, 1, 2, 3, 4],
             3: [0, 1, 2, 3, 4, 5]
           };
 
           const expVariants = exponent[level];
 
-          firstOperand = Math.floor(Math.random() * 10) + 1;
+          firstOperand = Math.floor(Math.random() * 10) + 2;
           secondOperand = expVariants.indexOf(Math.floor(Math.random() * expVariants.length));
           result = Math.pow(firstOperand, secondOperand);
           break;
@@ -223,6 +233,7 @@ export default {
       rightAnswersCount: computed(() => rightAnswersCount.value),
       inputAnswer: computed(() => inputAnswer.value),
       highlightColor: computed(() => highlightColor.value),
+      disableButtons: computed(() => disableButtons.value)
     }
   },
 }

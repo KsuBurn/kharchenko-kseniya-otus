@@ -7,6 +7,7 @@
       <button
           @click="$emit('handle-key-click', calcKey)"
           class="key"
+          :disabled="disableButtons"
           v-bind:class="{
             key: true,
             keyNone: !calcKey.length
@@ -23,6 +24,10 @@ export default {
   name: 'Keyboard',
 
   emits: ['handle-key-click'],
+
+  props: {
+    disableButtons: Boolean
+  },
 
   data() {
     return {
