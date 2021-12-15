@@ -140,8 +140,14 @@ export default {
     };
 
     const prepareTask = (operator) => {
-      const firstOperand = Math.floor(Math.random() * 10 * level);
-      const secondOperand = Math.floor(Math.random() * 10 * level);
+      const mathSignsCount = {
+        1: 10,
+        2: 100,
+        3: 1000
+      };
+
+      let firstOperand = Math.floor(Math.random() * mathSignsCount[level]);
+      let secondOperand = Math.floor(Math.random() * mathSignsCount[level]);
       let result;
 
       switch (operator) {
@@ -161,9 +167,20 @@ export default {
           result = firstOperand / secondOperand;
           break;
 
-        case Operatos.EXP:
+        case Operatos.EXP: {
+          const exponent = {
+            1: [0, 1, 2],
+            2: [0, 1, 2, 3, 4],
+            3: [0, 1, 2, 3, 4, 5]
+          };
+
+          const expVariants = exponent[level];
+
+          firstOperand = Math.floor(Math.random() * 10) + 1;
+          secondOperand = expVariants.indexOf(Math.floor(Math.random() * expVariants.length));
           result = Math.pow(firstOperand, secondOperand);
           break;
+        }
       }
 
       operands.value.result = result;

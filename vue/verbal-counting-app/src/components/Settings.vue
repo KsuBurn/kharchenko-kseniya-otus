@@ -60,8 +60,8 @@ export default {
 
   setup(props) {
     const store = useStore();
-    const time = ref(1);
-    const level = ref(1);
+    const time = ref(store.state.time);
+    const level = ref(store.state.level);
     const selectedOperators = ref(store.state.selectedOperators)
 
     const handleChangeTime = (value) => {
