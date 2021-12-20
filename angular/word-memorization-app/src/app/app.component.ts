@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {SettingsService} from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'word-memorization-app';
+  title = 'Words Memorizing';
+
+  constructor(private readonly settings: SettingsService) {
+  }
+
+  get langFrom(): string {
+    return this.settings.langFrom;
+  }
+
+  get langTo(): string {
+    return this.settings.langTo;
+  }
 }

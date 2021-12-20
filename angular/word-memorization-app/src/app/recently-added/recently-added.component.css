@@ -1,0 +1,13 @@
+.wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.translateBtn {
+  display: block;
+}
+
+.form,
+.addedWords {
+  flex: 1;
+}

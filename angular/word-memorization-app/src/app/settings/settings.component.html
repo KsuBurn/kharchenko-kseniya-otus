@@ -1,1 +1,44 @@
-<p>settings works!</p>
+<form class="settings">
+  <div>
+    <mat-form-field appearance="fill" class="input">
+      <mat-label>Translate from</mat-label>
+
+      <mat-select>
+        <mat-option value="English">English</mat-option>
+        <mat-option value="Russian">Russian</mat-option>
+      </mat-select>
+    </mat-form-field>
+    -
+    <mat-form-field appearance="fill" class="input">
+      <mat-label>Translate to</mat-label>
+      <mat-select>
+        <mat-option value="English">English</mat-option>
+        <mat-option value="Russian">Russian</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="fill" class="input">
+    <mat-label>Time</mat-label>
+    <mat-select>
+      <mat-option value="one">1</mat-option>
+      <mat-option value="three">3</mat-option>
+      <mat-option value="five">5</mat-option>
+      <mat-option value="seven">7</mat-option>
+      <mat-option value="ten">10</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="input">
+    <mat-label>Words count</mat-label>
+    <mat-select>
+      <mat-option value="one">1</mat-option>
+      <mat-option value="three">3</mat-option>
+      <mat-option value="five">5</mat-option>
+      <mat-option value="seven">7</mat-option>
+      <mat-option value="ten">10</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button class="saveButton">Save</button>
+</form>

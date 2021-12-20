@@ -1,0 +1,12 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  width: 200px;
+}
+
+.saveButton {
+  width: 100px;
+}

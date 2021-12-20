@@ -1,1 +1,29 @@
-<p>recently-added works!</p>
+<div class="wrap">
+  <form class="form">
+    <h3>Add words</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Word to translate</mat-label>
+      <input matInput>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button class="translateBtn">Translate</button>
+  </form>
+
+  <div class="addedWords">
+    <h3>Recently added words</h3>
+    <p>no words added</p>
+
+    <mat-list>
+      <mat-list-item>
+        <span mat-line>
+          {{value}}
+        </span>
+        <button mat-icon-button aria-label="delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
